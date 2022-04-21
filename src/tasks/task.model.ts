@@ -11,4 +11,4 @@ enum ETaskStatus {
   DONE = 'done',
 }
 
-export { ITask };
+export { ITask, ETaskStatus };
