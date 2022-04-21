@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { remove } from 'lodash';
 
 import { ETaskStatus, ITask } from './task.model';
 import { CreateTaskDto } from './dto/createTask.dto';
@@ -30,5 +31,10 @@ export class TasksService {
     this.tasks.push(task);
 
     return task;
+  }
+
+  deleteTask(id: string): ITask {
+    const [removedTask] = remove(this.tasks, { id });
+    return removedTask;
   }
 }
