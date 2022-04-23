@@ -37,4 +37,10 @@ export class TasksService {
     const [removedTask] = remove(this.tasks, { id });
     return removedTask;
   }
+
+  updateTaskStatus(id: string, status: ETaskStatus): ITask {
+    const updatedTask = this.getTaskById(id);
+    updatedTask.status = status;
+    return updatedTask;
+  }
 }
