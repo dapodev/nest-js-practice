@@ -6,19 +6,27 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 
 import { ETaskStatus, ITask } from './task.model';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
+import { GetTasksFilterDto } from './dto/getTasksFilter.dto';
+import { isEmpty } from 'lodash';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private tasksService: TasksService) {}
 
   @Get()
-  getAllTasks(): ITask[] {
-    return this.tasksService.getAllTasks();
+  getTasks(@Query() filterDto: GetTasksFilterDto): ITask[] {
+    const isFilterRequired = !isEmpty(Object.keys(filterDto));
+    if (isFilterRequired) {
+      return this.tasksService.getTasksWithFilters(filterDto);
+    } else {
+      return this.tasksService.getAllTasks();
+    }
   }
 
   @Get('/:id')

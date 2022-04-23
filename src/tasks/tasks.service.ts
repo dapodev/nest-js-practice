@@ -5,6 +5,7 @@ import { ETaskStatus, ITask } from './task.model';
 import { CreateTaskDto } from './dto/createTask.dto';
 
 import { generateUniqueId } from 'src/common/utils/id';
+import { GetTasksFilterDto } from './dto/getTasksFilter.dto';
 
 @Injectable()
 export class TasksService {
@@ -12,6 +13,27 @@ export class TasksService {
 
   getAllTasks(): ITask[] {
     return this.tasks;
+  }
+
+  getTasksWithFilters(filter: GetTasksFilterDto): ITask[] {
+    const { status, search } = filter;
+
+    let filteredTasks = this.tasks;
+
+    filteredTasks = status
+      ? filteredTasks.filter((task) => task.status === status)
+      : filteredTasks;
+
+    filteredTasks = search
+      ? filteredTasks.filter((task) => {
+          const searchRegexp = new RegExp(search);
+          return (
+            searchRegexp.test(task.title) || searchRegexp.test(task.description)
+          );
+        })
+      : filteredTasks;
+
+    return filteredTasks;
   }
 
   getTaskById(id: string): ITask {
