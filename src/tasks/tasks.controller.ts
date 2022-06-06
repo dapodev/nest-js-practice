@@ -9,11 +9,12 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { ETaskStatus, ITask } from './task.model';
+import { ITask } from './task.model';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { GetTasksFilterDto } from './dto/getTasksFilter.dto';
 import { isEmpty } from 'lodash';
+import { UpdateTaskStatusDto } from './dto/updateTaskStatus.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -42,8 +43,9 @@ export class TasksController {
   @Patch('/:id/status')
   updateTaskStatus(
     @Param('id') id: string,
-    @Body('status') status: ETaskStatus,
+    @Body() updateTaskStatusDto: UpdateTaskStatusDto,
   ): ITask {
+    const { status } = updateTaskStatusDto;
     return this.tasksService.updateTaskStatus(id, status);
   }
 
