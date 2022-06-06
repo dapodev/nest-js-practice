@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { remove } from 'lodash';
 
 import { ETaskStatus, ITask } from './task.model';
@@ -37,7 +37,13 @@ export class TasksService {
   }
 
   getTaskById(id: string): ITask {
-    return this.tasks.find((task) => task.id === id);
+    const taskFound = this.tasks.find((task) => task.id === id);
+
+    if (!taskFound) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
+
+    return taskFound;
   }
 
   createTask(createTaskDto: CreateTaskDto): ITask {
