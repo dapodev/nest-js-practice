@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { remove } from 'lodash';
 
+import { generateUniqueId } from 'src/common/utils/id';
+
 import { ETaskStatus, ITask } from './task.model';
 import { CreateTaskDto } from './dto/createTask.dto';
-
-import { generateUniqueId } from 'src/common/utils/id';
 import { GetTasksFilterDto } from './dto/getTasksFilter.dto';
 
 @Injectable()
@@ -62,7 +62,8 @@ export class TasksService {
   }
 
   deleteTask(id: string): ITask {
-    const [removedTask] = remove(this.tasks, { id });
+    const foundTask = this.getTaskById(id);
+    const [removedTask] = remove(this.tasks, { id: foundTask.id });
     return removedTask;
   }
 
