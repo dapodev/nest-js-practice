@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { TaskStatus } from './task.model';
+
+import { TaskStatus } from './taskStatus.model';
 
 @Entity()
 export class Task {
@@ -12,6 +13,6 @@ export class Task {
   @Column()
   description: string;
 
-  @Column()
+  @Column({ default: TaskStatus.OPEN })
   status: TaskStatus;
 }
