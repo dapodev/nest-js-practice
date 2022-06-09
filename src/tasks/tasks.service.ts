@@ -22,7 +22,7 @@ export class TasksService {
   ): Promise<Task[]> {
     const { status, search } = filter;
 
-    const query = await this.tasksRepository.createQueryBuilder();
+    const query = await this.tasksRepository.createQueryBuilder('task');
     query.where({ user });
 
     if (status) {
@@ -30,7 +30,10 @@ export class TasksService {
     }
 
     if (search) {
-      query.andWhere({ title: search });
+      query.andWhere(
+        '(LOWER(task.title) LIKE LOWER(:search) or LOWER(task.description) LIKE LOWER(:search))',
+        { search: `%${search}%` },
+      );
     }
 
     const found = await query.getMany();
