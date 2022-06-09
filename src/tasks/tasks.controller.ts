@@ -11,6 +11,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
+import { GetUser } from 'src/auth/get-user.decorator';
+import { User } from 'src/auth/user.entity';
+
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/createTask.dto';
 import { GetTasksFilterDto } from './dto/getTasksFilter.dto';
@@ -47,7 +50,10 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksService.createTask(createTaskDto);
+  createTask(
+    @Body() createTaskDto: CreateTaskDto,
+    @GetUser() user: User,
+  ): Promise<Task> {
+    return this.tasksService.createTask(createTaskDto, user);
   }
 }
