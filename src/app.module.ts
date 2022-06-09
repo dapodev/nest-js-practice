@@ -4,11 +4,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigValidationSchema } from './config.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`],
+      validationSchema: ConfigValidationSchema,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
